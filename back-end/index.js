@@ -39,6 +39,7 @@ app.post('/searchRecipe', async (req, res) => {
 
 })
 
+
 app.post('/addNewRecipe', async (req, res) => {
     console.log(req.body);
     const recipe = await Recipe.create(req.body);
