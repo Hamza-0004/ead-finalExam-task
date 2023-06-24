@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>All Recipes</title>
+</head>
+<body>
+    <h1>Recipes</h1>
+    <ul>
+        <% for(let i=0; i<recipes.length; i++){ %>
+            <li>Title: <%=recipes[i].title%> - Description: <%=recipes[i].description%> - Ingredients: <%=recipes[i].ingredients%> - Instructions: <%=recipes[i].instruction%></li>
+        <% } %>
+    </ul>
+</body>
+</html>

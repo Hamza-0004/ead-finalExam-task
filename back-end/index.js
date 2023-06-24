@@ -17,21 +17,47 @@ app.listen(3003, ()=>{
 });
 
 app.get('/', (req, res) => {
-    res.json({message: "Hello World", msg2:"hello 2"})
+    res.render('home')
+    // res.json({message: "Hello World", msg2:"hello 2"})
 })
 
-app.post('/recipe/save', async (req, res) => {
+app.get('/searchRecipe', (req, res) => {
+    res.render('searchRecipe')
+})
+
+app.post('/searchRecipe', async (req, res) => {
+    console.log(req.body);
+    const title = req.body.title;
+
+    const recipes = await Recipe.find({title:title});
+
+    if(!recipes){
+        res.redirect('/searchRecipe')
+    }else{
+        res.render('showSearchedRecipes',{recipes})
+    }
+
+})
+
+app.post('/addNewRecipe', async (req, res) => {
     console.log(req.body);
     const recipe = await Recipe.create(req.body);
 
+    recipe.ingredients = req.body.ingredients.split(',');
+
     if(!recipe){
-        return res.redirect('/recipe/new')
+        return res.redirect('/addNewRecipe')
     }
     res.redirect('/getRecipes')
 })
 
+app.get('/addNewRecipe',(req,res)=>{
+    res.render('addRecipe')
+})
+
 app.post('/recipe/delete', async (req, res) => {
     const {_id}=req.body;
+    
     Recipe.deleteOne({_id:_id},(err)=>{
         if(!err){
             res.status(200).send({
@@ -50,7 +76,8 @@ app.post('/recipe/delete', async (req, res) => {
 app.get('/getRecipes', async ( req,res)=>{
     const recipes = await Recipe.find();
     console.log(recipes);
-    res.json(recipes);
+    // res.json(recipes);
+    res.render('showAllRecipes',{recipes});
 })
 
 app.use('*',(req,res)=>{
